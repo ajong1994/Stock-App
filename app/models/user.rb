@@ -9,4 +9,8 @@ class User < ApplicationRecord
   validates :password, length: {minimum: 8}
   validates :full_name, uniqueness: true,
                       presence: true
+
+  def admin?
+    type == "Admin"
+  end
 end
