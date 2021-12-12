@@ -5,8 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :transactions
   validates :email, uniqueness: true,
-                  present: true
+                  presence: true
   validates :password, length: {minimum: 8}
   validates :full_name, uniqueness: true,
-                      present: true
+                      presence: true
 end
