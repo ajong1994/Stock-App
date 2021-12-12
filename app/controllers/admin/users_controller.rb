@@ -18,7 +18,7 @@ class Admin::UsersController < ApplicationController
     end
   
     def create
-        @user = Client.create(user_params)
+        @user = Client.create(user_params.merge!(registration_status: "Active"))
     end
   
     def edit
