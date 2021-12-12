@@ -33,8 +33,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.1]
       # t.datetime :locked_at
 
       t.string :full_name, null: false
-      t.string :user_type, null: false
-      t.string :registration_status, null: false #Pending, Active, Rejected
+      t.string :user_type, null: false, default: "Client" #Client or Admin
+      t.string :registration_status, null: false, default: "Pending" #Pending, Active, Rejected
       t.decimal :balance, precision: 10, scale: 2
       t.timestamps null: false
     end
