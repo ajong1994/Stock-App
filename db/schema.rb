@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_12_080911) do
+ActiveRecord::Schema.define(version: 2021_12_12_153503) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "transactions", force: :cascade do |t|
@@ -21,12 +22,13 @@ ActiveRecord::Schema.define(version: 2021_12_12_080911) do
     t.integer "quantity", null: false
     t.decimal "security_price", null: false
     t.decimal "total_security_cost", null: false
-    t.integer "user_id", null: false
+    t.uuid "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "integer_id", default: -> { "nextval('users_id_seq'::regclass)" }, null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
