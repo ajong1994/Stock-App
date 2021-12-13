@@ -1,12 +1,8 @@
-require "test_helper"
+require 'rails_helper'
 
-class ClientTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+RSpec.describe Client, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
-
-
 
 # 2. User
 # User Story #1: As a User, I want to create an account
