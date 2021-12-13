@@ -6,7 +6,7 @@ class CreateTransactions < ActiveRecord::Migration[6.1]
       t.integer :quantity, null:false
       t.decimal :security_price, null:false
       t.decimal :total_security_cost, null:false
-      t.uuid :user_id, null:false
+      t.references :user, type: :uuid, null:false
       t.timestamps
     end
   end
