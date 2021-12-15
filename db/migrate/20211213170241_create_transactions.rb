@@ -1,6 +1,6 @@
 class CreateTransactions < ActiveRecord::Migration[6.1]
   def change
-    create_table :transactions do |t|
+    create_table :transactions,id: :uuid do |t|
       t.string :transaction_type, null:false
       t.string :security_symbol, null:false
       t.integer :quantity, null:false

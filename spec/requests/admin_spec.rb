@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin, type: :model do
+RSpec.describe Admin, type: :request do
   let(:complete_params) {{
     email: "aji@modelrspec.com",
     password: 'sample_pass123',
