@@ -74,6 +74,20 @@ RSpec.describe Admin, type: :model do
 
     end
   end
+
+  describe 'Can edit client status' do
+    let!(:client) {Client.create(complete_params)}
+
+    it 'Registration property of client should be updatable to active' do
+      Client.find_by(email: 'aji@modelrspec.com').update(registration_status:'Active')
+      expect(Client.all.first.registration_status).to eq('Active')
+    end
+
+    it 'Registration property of client should be updatable to rejected' do
+      Client.find_by(email: 'aji@modelrspec.com').update(registration_status:'Rejected')
+      expect(Client.all.first.registration_status).to eq('Rejected')
+    end
+  end
 end
 
 # 1. Admin

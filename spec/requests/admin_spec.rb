@@ -1,77 +1,67 @@
 require 'rails_helper'
 
 RSpec.describe Admin, type: :request do
-  let(:complete_params) {{
+
+  before :each do
+    sign_in create(:admin)
+  end
+
+  let!(:valid_params) {{
     email: "aji@modelrspec.com",
     password: 'sample_pass123',
     full_name: 'Test Subject 1'
   }}
-  let(:missing_email_params) {{
-    password: 'sample_pass',
-    full_name: 'Test Subject 1'
-  }}
-  let(:missing_name_params) {{
-    email: 'Aji@modelrspec.com',
-    password: 'sample_pass',
-  }}
 
-  describe 'Can create user manually' do
-    context 'Valid parameters' do
-      it 'User count should increase on create' do
-        expect{Client.create(complete_params)}.to change(Client,:count).by(1)
-      end
-    end
+  let!(:test_client) {Client.create(email: "aji2@modelrspec.com", password: 'sample_pass123',full_name: 'Test Subject 4')}
 
-    context 'Invalid parameters' do
-      it 'User count should not increase if email is missing' do
-        expect{Client.create(missing_email_params)}.to change(Client,:count).by(0)
-      end
-
-      it 'User count should not increase if full name is missing' do
-        expect{Client.create(missing_name_params)}.to change(Client,:count).by(0)
-      end
+  describe 'GET /new' do
+    it 'Returns successful header' do
+      get new_admin_user_path
+      expect(response).to be_successful
     end
   end
 
-  describe 'Can view specific users' do
-    let!(:client) {Client.create(complete_params)}
+  describe 'POST /create' do
+    it 'Returns successful header and redirects to show' do
+      expect{post admin_users_path, params: { client: valid_params }}.to change(Client, :count).by(1)
 
-    it 'User properties should be accessible after creation if provided correct ID' do
-      expect(Client.find_by(email: 'aji@modelrspec.com')).to be_truthy
-      expect(Client.find_by(email: 'aji@modelrspec.com').full_name).to eq('Test Subject 1')
+      post admin_users_path, params: { client: {email: "aji3@modelrspec.com", password: 'sample_pass123',full_name: 'Test Subject 10'}}
+      client = Client.last
+      expect(response).to redirect_to(admin_user_path(client.id))
     end
   end
 
-  describe 'Can edit user information' do
-    let!(:client) {Client.create(complete_params)}
-
-    it 'User email should update' do
-      Client.find_by(email: 'aji@modelrspec.com').update(email:'aji2@modelrspec.com')
-      expect(Client.find_by(email: 'aji2@modelrspec.com')).to be_truthy
-    end
-
-    it 'User full name should update' do
-      Client.find_by(full_name:'Test Subject 1').update(full_name:'Test Subject 2')
-      expect(Client.find_by(full_name:'Test Subject 2').email).to be_truthy
-    end
-
-    it 'User password should update' do
-      expect(Client.find_by(full_name:'Test Subject 1').update(password:'sample2_pass')).to be true
+  describe 'GET /show' do
+    it 'Returns successful header' do
+      client = Client.last
+      get admin_user_path(client.id)
+      expect(response).to be_successful
     end
   end
 
-  describe 'Can access all of the users' do
-    before :each do
-      Client.create(complete_params)
-      Client.create(full_name: 'Test Subject 2', email:'aji2@modelrspec.com', password:'sample_test')
-      Client.create(full_name: 'Test Subject 3', email:'aji3@modelrspec.com', password:'sample_test')
+  describe 'GET /edit' do
+    it 'Returns successful header and edit template' do
+      client = Client.last
+      get edit_admin_user_path(client.id)
+      expect(response).to be_successful
     end
+  end
 
-    it 'List of users should match created samples' do
-      expect(Client.count).to eq(3)
-      expect(Client.all.first.full_name).to eq('Test Subject 1')
-      expect(Client.all.last.full_name).to eq('Test Subject 3')
+  describe 'PATCH /create' do
+    it 'Returns successful header and redirects to show template' do
+      client = Client.last
+      patch admin_user_path(client.id), params: { client: valid_params.merge!(full_name:'Test Subject 99') }
+      client.reload
+      expect(client.full_name).to eq('Test Subject 99')
+      expect(response).to redirect_to(admin_user_path(client.id))
+    end
+  end
+  
 
+  describe 'GET / users' do
+    it 'Returns successful header and users template' do
+      get admin_users_path
+      expect(response).to be_successful
     end
   end
 end

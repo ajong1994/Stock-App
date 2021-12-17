@@ -19,6 +19,16 @@ class Admin::UsersController < ApplicationController
   
     def create
         @user = Client.create(user_params.merge!(registration_status: "Active"))
+
+        respond_to do |format|
+            if @user.save
+              format.html { redirect_to admin_user_path(@user.id), notice: "Client was successfully created." } #what's the alternative path to redirect? directly using @task doesnt work
+              format.json { render :show, status: :created, location: @user }
+            else
+              format.html { render :new, status: :unprocessable_entity }
+              format.json { render json: @user.errors, status: :unprocessable_entity }
+            end
+        end
     end
   
     def edit
@@ -26,6 +36,16 @@ class Admin::UsersController < ApplicationController
   
     def update
         @user.update(user_params)
+
+        respond_to do |format|
+            if @user.save
+              format.html { redirect_to admin_user_path(@user.id), notice: "Client was successfully updated." } #what's the alternative path to redirect? directly using @task doesnt work
+              format.json { render :show, status: :created, location: @user }
+            else
+              format.html { render :new, status: :unprocessable_entity }
+              format.json { render json: @user.errors, status: :unprocessable_entity }
+            end
+        end
     end
   
     def destroy
