@@ -12,6 +12,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
+    if @user.save 
+      ClientMailer.with(user: @user).welcome_email.deliver_later
+    end
   end
 
   # GET /resource/edit
@@ -47,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:attribute, :full_name])
   end
 
   # The path used after sign up.

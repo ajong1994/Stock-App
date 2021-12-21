@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   }
 
   namespace :admin do
-    resources :users
+    resources :users do
+      member do
+        patch 'approve'
+        patch 'reject'
+      end
+    end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root to: "home#index"

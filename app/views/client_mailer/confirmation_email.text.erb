@@ -1,0 +1,6 @@
+Welcome to MoonTrade.com, <%= @user.full_name %>
+===============================================
+
+After reviewing your application, the team has decided to <% if @user.registration_status == 'Active' %>approve<% else %>reject<% end %> your application.
+
+Thank you.
