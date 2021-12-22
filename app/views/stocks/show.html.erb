@@ -21,11 +21,17 @@
         </tr>
     </tbody>
 </table>
-
+<p>Current balance: <%= number_to_currency(current_user.balance) %></p>
 <%= form_with url: stock_buy_path, method: :post do |form| %>
-  <p>Current price: $<%= @stock.latest_price %></p> 
   <%= form.label :qty, "Quantity:" %>
   <%= form.text_field :buy_qty %>
-  <%= form.hidden_field :symbol, value: @stock.symbol %>
+  <%= form.hidden_field :buy_symbol, value: @stock.symbol %>
   <%= form.submit "Buy", name: nil %>
+<% end %>
+
+<%= form_with url: stock_sell_path, method: :post do |form| %>
+  <%= form.label :qty, "Quantity:" %>
+  <%= form.text_field :sell_qty %>
+  <%= form.hidden_field :sell_symbol, value: @stock.symbol %>
+  <%= form.submit "Sell", name: nil %>
 <% end %>

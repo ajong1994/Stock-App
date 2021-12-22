@@ -8,4 +8,4 @@
 
 
 Admin.create(email: 'aji@admin.com', password: 'Password', full_name: 'Admin Aji', type: 'Admin', registration_status: 'Active')
-Client.create(email: "aji2@modelrspec.com", password: 'sample_pass123',full_name: 'Test Subject 4')
+Client.create(email: "aji2@modelrspec.com", password: 'sample_pass123',full_name: 'Test Subject 4', balance: 10000.00)

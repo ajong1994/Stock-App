@@ -1,9 +1,6 @@
 class Transaction < ApplicationRecord
     belongs_to :user
-    validates :transaction_type, presence: true
-    validates :security_symbol, presence: true 
-    validates :quantity, numericality: {greater_than: 0}
+    validates :transaction_type, :security_symbol, :quantity, :total_security_cost, :user_id,
+                                                                                    presence: true
     validates :security_price, numericality: {greater_than: 0}
-    validates :total_security_cost, numericality: {greater_than: 0}
-    validates :user_id, presence: true
 end

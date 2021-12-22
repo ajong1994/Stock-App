@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_170241) do
     t.string "full_name", null: false
     t.string "type", default: "Client", null: false
     t.string "registration_status", default: "Pending", null: false
-    t.decimal "balance", precision: 10, scale: 2
+    t.decimal "balance", precision: 10, scale: 2, default: "0.0"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   }
 
   get 'stock', to: 'stocks#show', as: 'stock'
-  get 'stocks', to: 'stocks#index', as: 'stocks'
+  get 'trade', to: 'stocks#index', as: 'trade'
   post 'stock/buy', to: 'stocks#buy', as: 'stock_buy'
   post 'stock/sell', to: 'stocks#sell', as: 'stock_sell'
 
