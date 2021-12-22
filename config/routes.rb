@@ -4,6 +4,11 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
+  get 'stock', to: 'stocks#show', as: 'stock'
+  get 'stocks', to: 'stocks#index', as: 'stocks'
+  post 'stock/buy', to: 'stocks#buy', as: 'stock_buy'
+  post 'stock/sell', to: 'stocks#sell', as: 'stock_sell'
+
   namespace :admin do
     resources :users do
       member do

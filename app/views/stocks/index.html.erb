@@ -1,0 +1,30 @@
+<%= form_with url: stock_path, method: :get do |form| %>
+  <%= form.label :symbol, "Search for stock symbol:" %>
+  <%= form.text_field :symbol %>
+  <%= form.submit "Search", name: nil %>
+<% end %>
+
+<table>
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Company Name</th>
+            <th>Latest Price</th>
+            <th>Shares Traded on IEX</th>
+            <th>1D Price Change</th>
+            <th>1D Price Change %</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @stocks.each do |stock| %>
+            <tr> 
+                <td><%= stock.symbol %> </td>
+                <td><%= stock.company_name %> </td>
+                <td><%= stock.latest_price %> </td>
+                <td><%= stock.iex_volume %> </td>
+                <td><%= stock.change %> </td>
+                <td><%= stock.change_percent_s %> </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+
+<table>
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Company Name</th>
+            <th>Latest Price</th>
+            <th>Shares Traded on IEX</th>
+            <th>1D Price Change</th>
+            <th>1D Price Change %</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr> 
+            <td><%= @stock.symbol %> </td>
+            <td><%= @stock.company_name %> </td>
+            <td><%= @stock.latest_price %> </td>
+            <td><%= @stock.iex_volume %> </td>
+            <td><%= @stock.change %> </td>
+            <td><%= @stock.change_percent_s %> </td>
+        </tr>
+    </tbody>
+</table>
+
+<%= form_with url: stock_buy_path, method: :post do |form| %>
+  <p>Current price: $<%= @stock.latest_price %></p> 
+  <%= form.label :qty, "Quantity:" %>
+  <%= form.text_field :buy_qty %>
+  <%= form.hidden_field :symbol, value: @stock.symbol %>
+  <%= form.submit "Buy", name: nil %>
+<% end %>
