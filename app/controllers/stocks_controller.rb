@@ -2,12 +2,23 @@ class StocksController < ApplicationController
     before_action :instantiate_client
     
     def index
-        @stocks = @client.stock_market_list(:iexvolume)
+        @trending = @client.stock_market_list(:iexvolume)
+        @stocks = current_user.current_stocks
+        @latest_price = {} 
+        @stocks.each do |s|
+            @latest_price[s.security_symbol] = @client.quote(s.security_symbol).latest_price
+        end
     end
 
     def show
         #Begin and rescue SymbolNotFound error if ticker does not exist
-        @stock = @client.quote(params[:symbol])
+        begin
+            @stock = @client.quote(params[:symbol])
+        rescue 
+            respond_to do |format|
+                format.html { redirect_to trade_path, notice: "Sorry, we can't find a stock with that symbol." }
+            end
+        end
     end
 
     def buy 
@@ -16,18 +27,38 @@ class StocksController < ApplicationController
         price = quote.latest_price.to_d
         total_cost = qty * price
         balance = current_user.balance == nil ? 0.00 : current_user.balance
+        valid = false
         if (balance > total_cost) && qty > 0
             transaction = current_user.transactions.create(
                 transaction_type: 'buy',
+                security_name: quote.company_name,
                 security_symbol: quote.symbol,
                 quantity: qty,
                 security_price: price,
                 total_security_cost: total_cost,
                 user_id: current_user.id
             )
+            if (transaction && transaction.save) && current_user.current_stocks.find_by(security_symbol: quote.symbol)
+                purchased_stock = current_user.current_stocks.find_by(security_symbol: quote.symbol)
+                purchased_stock.update(
+                    quantity: purchased_stock.quantity + qty,
+                    total_security_cost: purchased_stock.total_security_cost + total_cost,
+                )
+                valid = true 
+            else
+                purchased_stock = current_user.current_stocks.create(
+                    security_symbol: quote.symbol,
+                    security_name: quote.company_name,
+                    quantity: qty,
+                    total_security_cost: total_cost,
+                    user_id: current_user.id
+                ) 
+                valid = true
+            end 
         end 
         respond_to do |format|
-            if (transaction && transaction.save) && (balance > total_cost) && (qty > 0)
+            #Need to validation .create and .update presence because otherwise, save will throw an error
+            if  valid == true 
                 current_user.update(
                     balance: balance - total_cost
                 )
@@ -47,19 +78,29 @@ class StocksController < ApplicationController
         quote = @client.quote(params[:sell_symbol])
         price = quote.latest_price.to_d
         total_price = qty * price
-        sellable_qty = current_user.transactions.where(security_symbol: quote.symbol).sum(:quantity) || 0 
+        sellable_qty = current_user.current_stocks.find_by(security_symbol: quote.symbol).quantity || 0
+        valid = false  
         if (sellable_qty >= qty) && qty > 0
             transaction = current_user.transactions.create(
                 transaction_type: 'sell',
+                security_name: quote.company_name,
                 security_symbol: quote.symbol,
                 quantity: -qty,
                 security_price: price,
                 total_security_cost: -total_price,
                 user_id: current_user.id
             )
+            if (transaction && transaction.save) 
+                purchased_stock = current_user.current_stocks.find_by(security_symbol: quote.symbol)
+                purchased_stock.update(
+                    quantity: purchased_stock.quantity - qty,
+                    total_security_cost: purchased_stock.total_security_cost - ((purchased_stock.total_security_cost / purchased_stock.quantity) * qty)
+                )
+                valid = true 
+            end 
         end 
         respond_to do |format|
-            if (transaction && transaction.save) && (sellable_qty >= qty) && qty > 0
+            if valid == true 
                 current_user.update(
                     balance: (current_user.balance || 0.00) + total_price
                 )

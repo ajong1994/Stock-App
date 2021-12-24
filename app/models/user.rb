@@ -4,6 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :transactions
+  has_many :current_stocks
   validates :email, uniqueness: true,
                   presence: true
   validates :password, length: {minimum: 8}, unless: -> {password.nil?}

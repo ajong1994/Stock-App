@@ -1,5 +1,5 @@
-<h1>New Transaction</h1>
-
-<%= render 'form', transaction: @transaction %>
-
-<%= link_to 'Back', transactions_path %>
+<%= form_with scope: :transaction, url: transactions_path, method: :post do |form| %>
+  <%= form.label :amount, "Enter cash-in amount:" %>
+  <%= form.text_field :amount %>
+  <%= form.submit "Cash In", name: nil %>
+<% end %>

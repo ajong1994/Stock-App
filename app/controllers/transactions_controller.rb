@@ -12,7 +12,6 @@ class TransactionsController < ApplicationController
 
   # GET /transactions/new
   def new
-    @transaction = Transaction.new
   end
 
   # GET /transactions/1/edit
@@ -21,39 +20,34 @@ class TransactionsController < ApplicationController
 
   # POST /transactions or /transactions.json
   def create
-    @transaction = Transaction.new(transaction_params)
-
+    amount = transaction_params[:amount].to_d
+    cash_in = current_user.transactions.create(
+        transaction_type: "Cash In",
+        security_name: "Cash in via Debit",
+        security_symbol: "CI",
+        quantity: 1,
+        security_price: amount,
+        total_security_cost: amount,
+        user_id: current_user.id
+    )
     respond_to do |format|
-      if @transaction.save
-        format.html { redirect_to @transaction, notice: "Transaction was successfully created." }
-        format.json { render :show, status: :created, location: @transaction }
+      if  cash_in && cash_in.save
+          current_user.update(
+              balance: current_user.balance + amount
+          )
+          format.html { redirect_to request.referrer, notice: "Cash In was successful." }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
+          format.html { redirect_to request.referrer, notice: "Something went wrong with your request." }
       end
     end
   end
 
   # PATCH/PUT /transactions/1 or /transactions/1.json
   def update
-    respond_to do |format|
-      if @transaction.update(transaction_params)
-        format.html { redirect_to @transaction, notice: "Transaction was successfully updated." }
-        format.json { render :show, status: :ok, location: @transaction }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /transactions/1 or /transactions/1.json
   def destroy
-    @transaction.destroy
-    respond_to do |format|
-      format.html { redirect_to transactions_url, notice: "Transaction was successfully destroyed." }
-      format.json { head :no_content }
-    end
   end
 
   private
@@ -64,6 +58,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.fetch(:transaction, {})
+      params.require(:transaction).permit(:amount)
     end
 end

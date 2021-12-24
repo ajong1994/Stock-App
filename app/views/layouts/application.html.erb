@@ -10,8 +10,23 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <p id="notice"><%= notice %></p>
-    <%= yield %>
+  <body style="margin: 0">
+  <% if user_signed_in? %>
+    <div style="display:flex; align-items:center; margin: 20px 10px">
+      <p style="margin: 0 auto 0 10px">MoonTrade</p>
+      <div style="margin: 0 10px 0 auto">
+        <% if current_user.admin? %> 
+          <%= link_to 'Users', admin_users_path %>
+        <% else %>        
+          <%= link_to 'Cash-In', cash_in_path %>
+          <%= link_to 'Trade', trade_path %>
+          <%= link_to 'Transactions', transactions_path %>
+        <% end %> 
+        <% if user_signed_in? %> <%= link_to 'Logout', destroy_user_session_path, method: :delete %> <% end %>
+      </div>
+    </div>
+  <% end %>
+    <p id="notice" style="margin:10px 50px"><%= notice %></p>
+    <div style="width: 80%; margin: auto"> <%= yield %> </div>
   </body>
 </html>

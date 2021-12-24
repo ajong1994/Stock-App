@@ -4,6 +4,34 @@
   <%= form.submit "Search", name: nil %>
 <% end %>
 
+<h2>Current Portfolio</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Average Price</th>
+            <th>Latest Price</th>
+            <th>Total Cost</th>
+            <th>Total Profit / Loss </th>
+            <th>Profit / Loss %</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @stocks.each do |s| %>
+            <tr> 
+                <td><%= s.security_symbol %> </td>
+                <td><%= s.quantity %> </td>
+                <td><%= number_to_currency(s.total_security_cost / s.quantity) %> </td>
+                <td><%= @latest_price[s.security_symbol] %> </td>
+                <td><%= number_to_currency(s.total_security_cost) %> </td>
+                <td><%= number_to_currency(@latest_price[s.security_symbol] * s.quantity - (s.total_security_cost)) %> </td>
+                <td><%= number_to_percentage(( @latest_price[s.security_symbol] - (s.total_security_cost / s.quantity) ) / (s.total_security_cost / s.quantity)) %> </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+<h2>Trending Stocks</h2>
 <table>
     <thead>
         <tr>
@@ -16,14 +44,14 @@
         </tr>
     </thead>
     <tbody>
-        <% @stocks.each do |stock| %>
+        <% @trending.each do |t| %>
             <tr> 
-                <td><%= stock.symbol %> </td>
-                <td><%= stock.company_name %> </td>
-                <td><%= stock.latest_price %> </td>
-                <td><%= stock.iex_volume %> </td>
-                <td><%= stock.change %> </td>
-                <td><%= stock.change_percent_s %> </td>
+                <td><%= t.symbol %> </td>
+                <td><%= t.company_name %> </td>
+                <td><%= t.latest_price %> </td>
+                <td><%= t.iex_volume %> </td>
+                <td><%= t.change %> </td>
+                <td><%= t.change_percent_s %> </td>
             </tr>
         <% end %>
     </tbody>

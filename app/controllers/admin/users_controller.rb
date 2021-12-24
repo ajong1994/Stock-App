@@ -24,7 +24,7 @@ class Admin::UsersController < ApplicationController
             if @user.save
               ClientMailer.with(user: @user).confirmation_email.deliver_later
 
-              format.html { redirect_to admin_user_path(@user.id), notice: "Client was successfully created." } #what's the alternative path to redirect? directly using @task doesnt work
+              format.html { redirect_to admin_users_path(@user.id), notice: "Client was successfully created." } #what's the alternative path to redirect? directly using @task doesnt work
               format.json { render :show, status: :created, location: @user }
             else
               format.html { render :new, status: :unprocessable_entity }
@@ -41,7 +41,7 @@ class Admin::UsersController < ApplicationController
 
         respond_to do |format|
             if @user.save
-              format.html { redirect_to admin_user_path(@user.id), notice: "Client was successfully updated." }
+              format.html { redirect_to edit_admin_user_path(@user.id), notice: "Client was successfully updated." }
               format.json { render :show, status: :created, location: @user }
             else
               format.html { render :new, status: :unprocessable_entity }
@@ -56,14 +56,6 @@ class Admin::UsersController < ApplicationController
   
     def approve
         @user.update(registration_status: "Active")
-        # respond_to do |format|
-        #     if @user.save
-        #         ClientMailer.with(user: @user).confirmation_email.deliver_later
-        #         format.html { redirect_to request.referrer, notice: "Client was successfully updated." } 
-        #     else
-        #         format.html { render :index, status: :unprocessable_entity }
-        #     end
-        # end
         post_approve_and_reject
     end
 
@@ -91,10 +83,6 @@ class Admin::UsersController < ApplicationController
   
         def user_params
             params.require(:client).permit(:email, :password, :password_confirmation, :full_name)
-        end
-
-        def approval_params
-            params.permit(:type)
         end
 
         def authorize_user!
