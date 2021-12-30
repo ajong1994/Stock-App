@@ -6,7 +6,8 @@
   <thead>
     <tr>
       <th>Action</th>
-      <th>Stock</th>
+      <th>Stock Name</th>
+      <th>Stock Symbol</th>
       <th>Quantity</th>
       <th>Price</th>
       <th>Total Cost</th>
@@ -18,6 +19,7 @@
     <% @transactions.each do |transaction| %>
       <tr>
         <td><%= transaction.transaction_type.upcase %> </td>
+        <td><%= transaction.security_name %> </td>
         <td><%= transaction.security_symbol %> </td>
         <td><%= transaction.quantity %> </td>
         <td><%= transaction.security_price %> </td>

@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :current_stocks
   validates :email, uniqueness: true,
                   presence: true
-  validates :password, length: {minimum: 8}, unless: -> {password.nil?}
+  validates :password, length: {minimum: 6}, unless: -> {password.nil?}
   validates :password, presence: true, if: -> {id.nil?}
   validates :full_name, uniqueness: true,
                       presence: true
