@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Client, type: :request do
 
-#   before :each do
-#     sign_in create(:client)
-#   end
-
   let!(:valid_params) {{
     email: "aji@modelrspec.com",
     password: 'sample_pass123',
@@ -25,7 +21,7 @@ RSpec.describe Client, type: :request do
       expect{post user_registration_path, params: { user: valid_params} }.to change(Client, :count).by(1)
 
       post user_registration_path, params: { user: { email: "aji3@modelrspec.com", password: 'sample_pass123', confirm_password: 'sample_pass123', full_name: 'Test Subject 10' }}
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(authenticated_user_root_path)
     end
   end
 
@@ -45,6 +41,7 @@ RSpec.describe Client, type: :request do
 
   describe 'GET /transactions' do
     it 'Returns successful header' do
+        sign_in create(:client)
         get transactions_path
         expect(response).to be_successful
     end

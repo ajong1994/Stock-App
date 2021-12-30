@@ -1,4 +1,5 @@
 class StocksController < ApplicationController
+    before_action :authenticate_user!
     before_action :instantiate_client
     
     def index
