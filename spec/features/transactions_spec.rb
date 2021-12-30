@@ -34,7 +34,6 @@ RSpec.describe Transaction, type: :feature do
 }
 
   describe 'As a Client, I want to see my trading history' do
-
     it 'On the /transactions page, I should see the buy transactions' do
         visit transactions_path
         expect(page).to have_content('Apple Incorporated Inc.')
@@ -57,64 +56,14 @@ RSpec.describe Transaction, type: :feature do
 
   end
 
-#   describe '#5: As a User, I want to edit a task to update task\'s details.' do
-#     it 'On the /edit path, editing Task Name should lead to a success message' do
-#         visit edit_category_task_path(1, 1)
-#         fill_in 'task_name', with: 'Sample Task 2'
-#         click_on ('Update Task')
-#         expect(page).to have_content('Task was successfully updated.')
-#         expect(page).to have_content('Sample Task 2')
-#     end
-
-#     it 'On the /edit path, editing Task Body should lead to a success message' do
-#         visit edit_category_task_path(1, 1)
-#         fill_in 'task_body', with: 'Placeholder Body'
-#         click_on ('Update Task')
-#         expect(page).to have_content('Task was successfully updated.')
-#         expect(page).to have_content('Sample Task')
-#         expect(page).to have_content('Placeholder Body')
-#     end
-
-#     it 'On the /edit path, editing Task Date should lead to a success message' do
-#         visit edit_category_task_path(1, 1)
-#         fill_in 'task_task_date', with: Date.tomorrow()
-#         click_on ('Update Task')
-#         expect(page).to have_content('Task was successfully updated.')
-#         expect(page).to have_content(Date.tomorrow())
-#     end
-
-#   end
-
-#   describe '#6: As a User, I want to view a task to show task\'s details.' do
-#     it 'When the user is on the category page, clicking the show link on any of the tasks should display the task\'s details' do
-#         visit category_path(1)
-#         click_on ('Show')
-#         expect(page).to have_content('Sample Task')
-#         expect(page).to have_content(Date.today())
-#         expect(find_link('Edit').visible?).to eq(true)
-#     end
-#   end
-
-#   describe '#7: As a User, I want to delete a task to lessen my unnecessary daily tasks.' do
-#     it 'Page should redirect and delete success message should display when delete button is clicked' do
-#         visit category_path(1)
-#         click_on ('Delete')
-#         expect(page).to have_content('Task was successfully destroyed.')
-#         expect(page).to have_content('Test Category')
-#         expect(find_link('New Task').visible?).to eq(true)
-#     end
-#   end
-
-#   describe '#8: As a User, I want to view my tasks for today for me to remind what are my priorities for today.' do
-#     it 'When accessing the category page, the tasks should be divided into tasks for today and non-urgent tasks' do
-#         visit category_path(1)
-#         expect(page).to have_content('Tasks Today')
-#         expect(page).to have_content(Date.today())
-#     end
-#   end
-
+  describe 'As a User, I want to cash in (dummy)' do
+    it 'On the /cash_in page, I can input a value to deposit to my virtual balance' do
+        visit cash_in_path
+        fill_in 'amount', with: '5000'
+        click_on ('Cash In')
+        expect(page).to have_content('Cash In was successful.')
+        expect(page).to have_content('Current balance: $5,000.00')
+    end
+   end
 end
 
-# User Story #5: As a User, I want to see my trading history
-
-# User Story #8: As a User, I want to cash in (dummy

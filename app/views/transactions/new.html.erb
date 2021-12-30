@@ -1,3 +1,5 @@
+<p>Current balance: <%= number_to_currency(current_user.balance) %></p>
+<br>
 <%= form_with scope: :transaction, url: transactions_path, method: :post do |form| %>
   <%= form.label :amount, "Enter cash-in amount:" %>
   <%= form.text_field :amount %>
