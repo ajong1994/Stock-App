@@ -9,14 +9,17 @@ RSpec.describe Transaction, type: :feature do
     click_on ('Log in')
   end
 
+  let (:stock_buy) { IEX::Api::Client.new().quote('AAPL') }
+  let (:stock_sell) { IEX::Api::Client.new().quote('AAPL') }
+
   let!(:transaction_buy) {
       Client.last.transactions.create(
         transaction_type: 'buy',
-        security_name: 'Apple Incorporated Inc.',
-        security_symbol: 'APPL',
+        security_name: stock_buy.company_name,
+        security_symbol: stock_buy.symbol,
         quantity: '2',
-        security_price: '160.2',
-        total_security_cost: '320.4',
+        security_price: stock_buy.latest_price,
+        total_security_cost: 2 * stock_buy.latest_price,
         user_id: Client.last.id
       )
   }
@@ -24,34 +27,34 @@ RSpec.describe Transaction, type: :feature do
   let!(:transaction_sell) {
     Client.last.transactions.create(
       transaction_type: 'sell',
-      security_name: 'Apple Incorporated Inc.',
-      security_symbol: 'APPL',
+      security_name: stock_sell.company_name,
+      security_symbol: stock_sell.symbol,
       quantity: '-1',
-      security_price: '150.0',
-      total_security_cost: '-150.0',
+      security_price: stock_sell.latest_price,
+      total_security_cost: -1 * stock_sell.latest_price,
       user_id: Client.last.id
     )
-}
+  }
 
   describe 'As a Client, I want to see my trading history' do
     it 'On the /transactions page, I should see the buy transactions' do
         visit transactions_path
-        expect(page).to have_content('Apple Incorporated Inc.')
-        expect(page).to have_content('APPL')
+        expect(page).to have_content(transaction_buy.security_name)
+        expect(page).to have_content(transaction_buy.security_symbol)
         expect(page).to have_content('BUY')
         expect(page).to have_content('2')
-        expect(page).to have_content('160.2')
-        expect(page).to have_content('320.4')
+        expect(page).to have_content(transaction_buy.security_price)
+        expect(page).to have_content(2 * transaction_buy.security_price)
     end
 
     it 'On the /transactions page, I should see the sell transactions' do
         visit transactions_path
-        expect(page).to have_content('Apple Incorporated Inc.')
-        expect(page).to have_content('APPL')
+        expect(page).to have_content(transaction_sell.security_name)
+        expect(page).to have_content(transaction_sell.security_symbol)
         expect(page).to have_content('SELL')
         expect(page).to have_content('-1')
-        expect(page).to have_content('150.0')
-        expect(page).to have_content('-150.0')
+        expect(page).to have_content(transaction_sell.security_price)
+        expect(page).to have_content(-1 * transaction_sell.security_price)
     end
 
   end

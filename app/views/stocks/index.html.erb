@@ -8,7 +8,8 @@
 <table>
     <thead>
         <tr>
-            <th>Symbol</th>
+            <th>Stock Name</th>
+            <th>Stock Symbol</th>
             <th>Quantity</th>
             <th>Average Price</th>
             <th>Latest Price</th>
@@ -20,6 +21,7 @@
     <tbody>
         <% @stocks.each do |s| %>
             <tr> 
+                <td><%= s.security_name %> </td>
                 <td><%= s.security_symbol %> </td>
                 <td><%= s.quantity %> </td>
                 <td><%= number_to_currency(s.total_security_cost / s.quantity) %> </td>
@@ -35,8 +37,8 @@
 <table>
     <thead>
         <tr>
-            <th>Symbol</th>
-            <th>Company Name</th>
+            <th>Stock Symbol</th>
+            <th>Stock Name</th>
             <th>Latest Price</th>
             <th>Shares Traded on IEX</th>
             <th>1D Price Change</th>

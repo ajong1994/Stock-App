@@ -79,7 +79,7 @@ class StocksController < ApplicationController
         quote = @client.quote(params[:sell_symbol])
         price = quote.latest_price.to_d
         total_price = qty * price
-        sellable_qty = current_user.current_stocks.find_by(security_symbol: quote.symbol).quantity || 0
+        sellable_qty = current_user.current_stocks.find_by(security_symbol: quote.symbol) == nil ? 0 : current_user.current_stocks.find_by(security_symbol: quote.symbol).quantity
         valid = false  
         if (sellable_qty >= qty) && qty > 0
             transaction = current_user.transactions.create(
