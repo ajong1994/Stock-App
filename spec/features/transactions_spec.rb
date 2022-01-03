@@ -65,7 +65,7 @@ RSpec.describe Transaction, type: :feature do
         fill_in 'amount', with: '5000'
         click_on ('Cash In')
         expect(page).to have_content('Cash In was successful.')
-        expect(page).to have_content('Current balance: $5,000.00')
+        expect(page).to have_content('Current balance: $10,000.00')
     end
    end
 end

@@ -26,6 +26,9 @@
       </div>
     </div>
   <% end %>
+    <% if flash[:alert] %>
+      <div class='alert alert-danger' style="margin:10px 50px; color: red"><%= flash[:alert] %></div>
+    <% end %>
     <p id="notice" style="margin:10px 50px"><%= notice %></p>
     <div style="width: 80%; margin: auto"> <%= yield %> </div>
   </body>

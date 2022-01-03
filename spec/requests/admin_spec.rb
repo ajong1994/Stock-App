@@ -27,7 +27,7 @@ RSpec.describe Admin, type: :request do
 
       post admin_users_path, params: { client: {email: "aji3@modelrspec.com", password: 'sample_pass123',full_name: 'Test Subject 10'}}
       client = Client.last
-      expect(response).to redirect_to(admin_users_path(client.id))
+      expect(response).to redirect_to(admin_users_path)
     end
   end
 

@@ -24,7 +24,7 @@ class Admin::UsersController < ApplicationController
             if @user.save
               ClientMailer.with(user: @user).confirmation_email.deliver_later
 
-              format.html { redirect_to admin_users_path(@user.id), notice: "Client was successfully created." } #what's the alternative path to redirect? directly using @task doesnt work
+              format.html { redirect_to admin_users_path, notice: "Client was successfully created." } #what's the alternative path to redirect? directly using @task doesnt work
               format.json { render :show, status: :created, location: @user }
             else
               format.html { render :new, status: :unprocessable_entity }
@@ -90,6 +90,6 @@ class Admin::UsersController < ApplicationController
         end
 
         def unauthorized
-            redirect_to new_user_session_path, alert: 'You are not authorized.'
+            redirect_to new_user_session_path, notice: 'You are not authorized.'
         end
   end 

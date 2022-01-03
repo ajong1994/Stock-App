@@ -80,12 +80,12 @@ RSpec.describe Client, type: :model do
 
     it 'Registration property of client should be updatable to active' do
       Client.find_by(email: 'aji@modelrspec.com').update(registration_status:'Active')
-      expect(Client.all.first.registration_status).to eq('Active')
+      expect(Client.all.last.registration_status).to eq('Active')
     end
 
     it 'Registration property of client should be updatable to rejected' do
       Client.find_by(email: 'aji@modelrspec.com').update(registration_status:'Rejected')
-      expect(Client.all.first.registration_status).to eq('Rejected')
+      expect(Client.all.last.registration_status).to eq('Rejected')
     end
   end
 end
